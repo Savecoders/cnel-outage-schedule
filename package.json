@@ -8,11 +8,29 @@
     "build": "astro check && astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "format": "prettier --cache --write --plugin-search-dir=. ."
+    "format": "prettier --cache --write --plugin-search-dir=. .",
+    "lint": "eslint --fix .",
+    "prepare": "husky"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
+    "@astrojs/react": "^3.6.2",
+    "@astrojs/tailwind": "^5.1.2",
+    "@radix-ui/react-dropdown-menu": "^2.1.2",
+    "@radix-ui/react-select": "^2.1.2",
+    "@radix-ui/react-slot": "^1.1.0",
+    "@radix-ui/react-toast": "^1.2.2",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
     "astro": "5.0.0-beta.8",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.460.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tailwind-merge": "^2.5.4",
+    "tailwindcss": "^3.4.15",
+    "tailwindcss-animate": "^1.0.7",
     "typescript": "^5.6.3"
   },
   "devDependencies": {
