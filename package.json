@@ -10,7 +10,8 @@
     "astro": "astro",
     "format": "prettier --cache --write --plugin-search-dir=. .",
     "lint": "eslint --fix .",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test": "vitest"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
@@ -35,14 +36,17 @@
   },
   "devDependencies": {
     "@commitlint/types": "^19.5.0",
+    "@testing-library/jest-dom": "^6.6.3",
     "@typescript-eslint/parser": "^8.14.0",
     "eslint": "^9.15.0",
     "eslint-plugin-astro": "^1.3.1",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-prettier": "^5.2.1",
     "husky": "^9.1.6",
+    "jsdom": "^25.0.1",
     "lint-staged": "^15.2.10",
     "prettier": "^3.3.3",
-    "prettier-plugin-astro": "^0.14.1"
+    "prettier-plugin-astro": "^0.14.1",
+    "vitest": "^2.1.5"
   }
 }
