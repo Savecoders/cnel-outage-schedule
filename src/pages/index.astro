@@ -2,6 +2,9 @@
 import { ModeToggle } from '@/components/mode-toggle';
 import Layout from '../layouts/Layout.astro';
 import '../styles/globals.css';
+import { SelectCriteria } from '@/components/select-criteria';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 ---
 
 <script is:inline>
@@ -26,6 +29,14 @@ import '../styles/globals.css';
 <Layout title='Welcome to Astro.'>
   <main>
     <ModeToggle client:load />
+
+    <section class='flex flex-col items-center justify-center h-screen'>
+      <div class='flex flex-row gap-4'>
+        <SelectCriteria client:load />
+        <Input client:load />
+        <Button client:load>Search</Button>
+      </div>
+    </section>
   </main>
 </Layout>
 
