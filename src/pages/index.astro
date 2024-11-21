@@ -2,9 +2,7 @@
 import { ModeToggle } from '@/components/mode-toggle';
 import Layout from '../layouts/Layout.astro';
 import '../styles/globals.css';
-import { SelectCriteria } from '@/components/select-criteria';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
+import FormSearch from '@/components/form-search';
 ---
 
 <script is:inline>
@@ -26,18 +24,13 @@ import { Button } from '@/components/ui/button';
   }
 </script>
 
-<Layout title='Welcome to Astro.'>
+<Layout title='Cnel Outage Schedule'>
   <main>
     <ModeToggle client:load />
-
     <section class='flex flex-col items-center justify-center h-screen'>
       <div class='flex flex-row gap-4'>
-        <SelectCriteria client:load />
-        <Input client:load />
-        <Button client:load>Search</Button>
+        <FormSearch client:load />
       </div>
     </section>
   </main>
 </Layout>
-
-<style></style>
