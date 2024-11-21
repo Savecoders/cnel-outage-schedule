@@ -3,10 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import type { CriteriaSearch } from "@/enums/criteriaSearch";
-import type { ApiSchedule } from "@/types/api-schedule.type";
-import { CnelScheduleService } from "@/services/cnel-schedule.service";
-import type { TransformedSchedule } from "@/types/transformed-schedule.type";
-import scheduleTransformer from "@/lib/schedule-transformer";
+import { useSchedule } from "@/hooks/use-schedule";
 
 export default function FormSearch() {
   const [formState, setFormState] = useState({
@@ -14,12 +11,7 @@ export default function FormSearch() {
     value: "",
   });
 
-  const [searchState, setSearchState] = useState({
-    isLoading: false,
-    error: null as string | null,
-    data: null as ApiSchedule | null,
-    transformedData: null as TransformedSchedule | null,
-  });
+  const { isLoading, error, transformedData, fetchSchedule } = useSchedule();
 
   const handleChangeCriteria = (criteria: string) => {
     setFormState((prev) => ({ ...prev, criteria: criteria as CriteriaSearch }));
@@ -31,33 +23,7 @@ export default function FormSearch() {
 
   const handleSearch = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setSearchState((prev) => ({ ...prev, isLoading: true, error: null }));
-
-    try {
-      const scheduleService = new CnelScheduleService();
-      const data = await scheduleService.getSchedule(
-        formState.criteria as string,
-        formState.value,
-      );
-
-      const transformedData = data ? scheduleTransformer.transform(data) : null;
-
-      setSearchState((prev) => ({
-        ...prev,
-        data,
-        transformedData,
-        error: null,
-      }));
-    } catch (error) {
-      setSearchState((prev) => ({
-        ...prev,
-        error: error as string,
-        data: null,
-        transformedData: null,
-      }));
-    } finally {
-      setSearchState((prev) => ({ ...prev, isLoading: false }));
-    }
+    fetchSchedule(formState.criteria as CriteriaSearch, formState.value);
   };
 
   return (
@@ -67,9 +33,7 @@ export default function FormSearch() {
       <Button
         type="submit"
         aria-label="Buscar"
-        disabled={
-          searchState.isLoading || !formState.criteria || !formState.value
-        }
+        disabled={isLoading || !formState.criteria || !formState.value}
       >
         Buscar
       </Button>
