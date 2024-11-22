@@ -1,62 +1,61 @@
 import type { CriteriaSearch } from "@/enums/criteriaSearch";
+import { createQueryClient } from "@/lib/query-client";
 import scheduleTransformer from "@/lib/schedule-transformer";
 import { CnelScheduleService } from "@/services/cnel-schedule.service";
-import type { ApiSchedule } from "@/types/api-schedule.type";
-import type { TransformedSchedule } from "@/types/transformed-schedule.type";
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 
-export interface ScheduleState {
-  isLoading: boolean;
-  error: string | null;
-  data: ApiSchedule | null;
-  transformedData: TransformedSchedule | null;
-}
+export function useSchedule(
+  criteria?: CriteriaSearch,
+  value?: string,
+  options?: {
+    enabled?: boolean;
+    staleTime?: number;
+  },
+) {
+  const DEFAULT_HOUR = 1000 * 60 * 60;
+  const queryClient = createQueryClient();
 
-export function useSchedule() {
-  const [state, setState] = useState<ScheduleState>({
-    isLoading: false,
-    error: null,
-    data: null,
-    transformedData: null,
-  });
-
-  const fetchSchedule = async (criteria: CriteriaSearch, value: string) => {
-    setState((prevState) => ({
-      ...prevState,
-      isLoading: true,
-      error: null,
-    }));
-
-    try {
-      // Fetch the data with the criteria and value
-      const scheduleService = new CnelScheduleService();
-      const data = await scheduleService.getSchedule(criteria, value);
-
-      // Transform the data
-      const transformedData = data ? scheduleTransformer.transform(data) : null;
-
-      setState((prevState) => ({
-        ...prevState,
-        isLoading: false,
-        data,
-        transformedData,
-      }));
-    } catch (error) {
-      setState((prevState) => ({
-        ...prevState,
-        data: null,
-        error: error as string,
-      }));
-    } finally {
-      setState((prevState) => ({
-        ...prevState,
-        isLoading: false,
-      }));
+  const getCachedData = () => {
+    if (criteria && value) {
+      return queryClient.getQueryData(["schedule", criteria, value]);
     }
+
+    const queries = queryClient.getQueriesData({ queryKey: ["schedule"] });
+    if (queries.length > 0) {
+      const [latestQueryKey, latestData] = queries[queries.length - 1];
+      return {
+        queryKey: latestQueryKey,
+        data: latestData,
+      };
+    }
+    return null;
   };
 
+  const query = useQuery(
+    {
+      queryKey: ["schedule", criteria, value],
+      queryFn: async () => {
+        // no criteria or value, return null
+        if (!criteria || !value) return null;
+
+        const scheduleService = new CnelScheduleService();
+        const data = await scheduleService.getSchedule(criteria, value);
+        return {
+          raw: data,
+          transformed: data ? scheduleTransformer.transform(data) : null,
+        };
+      },
+
+      // automatically enable the query if the criteria and value are provided
+      enabled: options?.enabled ?? Boolean(criteria && value),
+      // default stale time is 1 hour
+      staleTime: options?.staleTime ?? DEFAULT_HOUR,
+    },
+    queryClient,
+  );
+
   return {
-    ...state,
-    fetchSchedule,
+    ...query,
+    getCachedData,
   };
 }
