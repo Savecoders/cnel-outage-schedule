@@ -2,20 +2,26 @@ import { CriteriaSearch, criteriaSearchLabels } from "@/enums/criteriaSearch";
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
 
+interface SelectCriteriaProps {
+  onChange: (value: string) => void;
+  selectedCriteria?: CriteriaSearch;
+}
+
 export function SelectCriteria({
   onChange,
-}: {
-  onChange: (value: string) => void;
-}) {
+  selectedCriteria,
+}: SelectCriteriaProps) {
   return (
-    <Select onValueChange={onChange}>
+    <Select
+      onValueChange={onChange}
+      defaultValue={selectedCriteria}
+      value={selectedCriteria}
+    >
       <SelectTrigger>
         <SelectValue
           placeholder="Seleciona un criterio de búsqueda"
