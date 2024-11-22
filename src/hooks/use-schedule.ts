@@ -2,7 +2,18 @@ import type { CriteriaSearch } from "@/enums/criteriaSearch";
 import { createQueryClient } from "@/lib/query-client";
 import scheduleTransformer from "@/lib/schedule-transformer";
 import { CnelScheduleService } from "@/services/cnel-schedule.service";
-import { useQuery } from "@tanstack/react-query";
+import type { ApiSchedule } from "@/types/api-schedule.type";
+import type { TransformedSchedule } from "@/types/transformed-schedule.type";
+import {
+  useQuery,
+  type QueryKey,
+  type QueryState,
+} from "@tanstack/react-query";
+
+export interface ScheduleQuery {
+  queryKey: QueryKey;
+  data: QueryState<TransformedSchedule | null, ApiSchedule | null> | undefined;
+}
 
 export function useSchedule(
   criteria?: CriteriaSearch,
@@ -15,17 +26,23 @@ export function useSchedule(
   const DEFAULT_HOUR = 1000 * 60 * 60;
   const queryClient = createQueryClient();
 
-  const getCachedData = () => {
+  const getCachedData = (): ScheduleQuery | null | undefined => {
     if (criteria && value) {
-      return queryClient.getQueryData(["schedule", criteria, value]);
+      return queryClient.getQueryData<ScheduleQuery>([
+        "schedule",
+        criteria,
+        value,
+      ]);
     }
 
-    const queries = queryClient.getQueriesData({ queryKey: ["schedule"] });
+    const queries = queryClient.getQueriesData<ScheduleQuery>({
+      queryKey: ["schedule"],
+    });
     if (queries.length > 0) {
       const [latestQueryKey, latestData] = queries[queries.length - 1];
       return {
         queryKey: latestQueryKey,
-        data: latestData,
+        data: latestData?.data,
       };
     }
     return null;
@@ -50,6 +67,8 @@ export function useSchedule(
       enabled: options?.enabled ?? Boolean(criteria && value),
       // default stale time is 1 hour
       staleTime: options?.staleTime ?? DEFAULT_HOUR,
+      refetchOnReconnect: true, // refetch when the network reconnects
+      refetchOnMount: true, // refetch when the query is mounted
     },
     queryClient,
   );

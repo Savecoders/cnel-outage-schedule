@@ -2,12 +2,12 @@ import { SelectCriteria } from "@/components/select-criteria";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState, type ChangeEvent, type MouseEvent } from "react";
-import type { CriteriaSearch } from "@/enums/criteriaSearch";
+import { CriteriaSearch } from "@/enums/criteriaSearch";
 import { useSchedule } from "@/hooks/use-schedule";
 
 export default function FormSearch() {
   const [formState, setFormState] = useState({
-    criteria: undefined as CriteriaSearch | undefined,
+    criteria: CriteriaSearch.AccountCode,
     value: "",
   });
 
@@ -21,12 +21,7 @@ export default function FormSearch() {
 
   useEffect(() => {
     const cached = getCachedData();
-    if (
-      cached &&
-      typeof cached === "object" &&
-      "data" in cached &&
-      "queryKey" in cached
-    ) {
+    if (cached) {
       const [_, lastCriteria, lastValue] = cached.queryKey as [
         string,
         CriteriaSearch,
