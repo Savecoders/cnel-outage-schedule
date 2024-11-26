@@ -3,46 +3,45 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState, type ChangeEvent, type MouseEvent } from "react";
 import { CriteriaSearch } from "@/enums/criteriaSearch";
-import { useSchedule } from "@/hooks/use-schedule";
+import { useSchedule, type ScheduleData } from "@/hooks/use-schedule";
+import { customQueryClient } from "@/lib/query-client";
+import type { TransformedNotification } from "@/types/transformed-schedule.type";
+import Schedule from "./shedule";
+import { Skeleton } from "./ui/skeleton";
 
 export default function FormSearch() {
   const [formState, setFormState] = useState({
-    criteria: CriteriaSearch.AccountCode,
+    criteria: CriteriaSearch.Id,
     value: "",
   });
 
-  const { isLoading, error, data, refetch, getCachedData } = useSchedule(
-    formState.criteria,
-    formState.value,
-    { enabled: true },
-  );
+  const { isLoading, error, data, refetch, getCachedData, invalidateCache } =
+    useSchedule(customQueryClient, formState.criteria, formState.value, {
+      enabled: false,
+    });
 
-  const [cachedResults, setCachedResults] = useState<any>(null);
+  const [cachedResults, setCachedResults] = useState<ScheduleData | null>(null);
 
   useEffect(() => {
     const cached = getCachedData();
-    if (cached) {
+    if (cached?.queryKey && cached.state) {
       const [_, lastCriteria, lastValue] = cached.queryKey as [
         string,
         CriteriaSearch,
         string,
       ];
 
-      setFormState({
+      setFormState((prev) => ({
+        ...prev,
         criteria: lastCriteria,
         value: lastValue,
-      });
+      }));
 
-      if (
-        formState.criteria === lastCriteria &&
-        formState.value === lastValue
-      ) {
-        setCachedResults(cached.data);
-      } else {
-        setCachedResults(null);
+      if ("transformed" in cached.state) {
+        setCachedResults(cached.state);
       }
     }
-  }, [formState.criteria, formState.value]);
+  }, []);
 
   const handleChangeCriteria = (criteria: string) => {
     setFormState((prev) => ({ ...prev, criteria: criteria as CriteriaSearch }));
@@ -54,11 +53,12 @@ export default function FormSearch() {
 
   const handleSearch = async (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    refetch();
+    await invalidateCache();
+    await refetch();
   };
 
   return (
-    <div>
+    <div className="flex flex-col gap-6 max-w-3xl">
       <form className="flex flex-row gap-6">
         <SelectCriteria
           onChange={handleChangeCriteria}
@@ -74,15 +74,27 @@ export default function FormSearch() {
           Buscar
         </Button>
       </form>
-      {cachedResults && !isLoading && !data && (
-        <div className="mt-4">
-          <h3>Resultados en caché:</h3>
-          <div>{JSON.stringify(cachedResults.transformed)}</div>
+      {isLoading ? (
+        <div className="flex flex-col space-y-3">
+          <Skeleton className="h-[125px] w-full rounded-xl" />
         </div>
+      ) : (
+        <>
+          {data?.transformed?.notificaciones && (
+            <Schedule schedule={data.transformed?.notificaciones[0]} />
+          )}
+
+          {!data?.transformed?.notificaciones &&
+            cachedResults?.transformed?.notificaciones?.[0] && (
+              <Schedule
+                schedule={
+                  cachedResults.transformed
+                    .notificaciones[0] as TransformedNotification
+                }
+              />
+            )}
+        </>
       )}
-      {isLoading && <div>Cargando...</div>}
-      {error && <div>Error: {(error as Error).message}</div>}
-      {data?.transformed && <div>{JSON.stringify(data.transformed)}</div>}
     </div>
   );
 }
