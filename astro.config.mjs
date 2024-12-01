@@ -2,10 +2,10 @@
 import { defineConfig, envField } from "astro/config";
 import tailwind from "@astrojs/tailwind";
 import react from "@astrojs/react";
-import vercel from "@astrojs/vercel";
+import vercel from "@astrojs/vercel/serverless";
 
-// https://astro.build/config
 export default defineConfig({
+  output: "server",
   integrations: [
     tailwind({
       applyBaseStyles: false,
@@ -29,5 +29,16 @@ export default defineConfig({
     validateSecrets: true,
   },
 
-  adapter: vercel(),
+  adapter: vercel({
+    webAnalytics: {
+      enabled: true,
+    },
+    maxDuration: 8,
+    imageService: true,
+    imagesConfig: {
+      sizes: [320, 640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+      domains: ["images.unsplash.com"],
+    },
+    isr: true,
+  }),
 });
