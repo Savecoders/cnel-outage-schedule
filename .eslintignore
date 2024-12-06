@@ -1,5 +1,0 @@
-.vscode
-node_modules
-.env
-.env.local
-pnpm-lock.yaml

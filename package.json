@@ -9,7 +9,7 @@
     "preview": "astro preview",
     "astro": "astro",
     "format": "prettier --cache --write --plugin-search-dir=. .",
-    "lint": "eslint --fix .",
+    "lint": "eslint .",
     "prepare": "husky",
     "test": "vitest"
   },
