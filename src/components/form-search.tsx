@@ -8,6 +8,7 @@ import { customQueryClient } from "@/lib/query-client";
 import type { TransformedNotification } from "@/types/transformed-schedule.type";
 import Schedule from "./shedule";
 import { Skeleton } from "./ui/skeleton";
+import Danger from "./ui/danger";
 
 export default function FormSearch() {
   const [formState, setFormState] = useState({
@@ -48,7 +49,12 @@ export default function FormSearch() {
   };
 
   const handleChangeValue = (event: ChangeEvent<HTMLInputElement>) => {
-    setFormState((prev) => ({ ...prev, value: event.target.value }));
+    const prevValue = event.target.value;
+
+    if (/^\d*$/.test(prevValue)) {
+      // only numbers
+      setFormState((prev) => ({ ...prev, value: prevValue }));
+    }
   };
 
   const handleSearch = async (event: MouseEvent<HTMLButtonElement>) => {
@@ -64,7 +70,12 @@ export default function FormSearch() {
           onChange={handleChangeCriteria}
           selectedCriteria={formState.criteria}
         />
-        <Input onChange={handleChangeValue} value={formState.value} />
+        <Input
+          aria-placeholder="Identificación"
+          placeholder="Identificación"
+          onChange={handleChangeValue}
+          value={formState.value}
+        />
         <Button
           type="submit"
           aria-label="Buscar"
@@ -80,11 +91,14 @@ export default function FormSearch() {
         </div>
       ) : (
         <>
+          {error && <Danger message={error.message} error="Error" />}
+
           {data?.transformed?.notificaciones && (
             <Schedule schedule={data.transformed?.notificaciones[0]} />
           )}
 
           {!data?.transformed?.notificaciones &&
+            !error &&
             cachedResults?.transformed?.notificaciones?.[0] && (
               <Schedule
                 schedule={
