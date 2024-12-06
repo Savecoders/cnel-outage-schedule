@@ -7,11 +7,9 @@ import {
   type QueryClient,
   useQuery,
   type QueryKey,
-  type QueryState,
 } from "@tanstack/react-query";
 
 export interface ScheduleData {
-  raw: ApiSchedule | null;
   transformed: TransformedSchedule | null;
 }
 
@@ -82,7 +80,6 @@ export function useSchedule(
         const scheduleService = new CnelScheduleService();
         const data = await scheduleService.getSchedule(criteria, value);
         return {
-          raw: data,
           transformed: data ? scheduleTransformer.transform(data) : null,
         };
       },
