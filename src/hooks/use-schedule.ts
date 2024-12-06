@@ -7,6 +7,7 @@ import {
   type QueryClient,
   useQuery,
   type QueryKey,
+  type ThrowOnError,
 } from "@tanstack/react-query";
 
 export interface ScheduleData {
@@ -27,7 +28,7 @@ export function useSchedule(
     staleTime?: number;
   },
 ) {
-  const DEFAULT_HOUR = 1000 * 60 * 60;
+  const DEFAULT_HOUR = 1000 * 60 * 60 * 3;
 
   const invalidateCache = async () => {
     if (criteria && value) {
@@ -77,11 +78,23 @@ export function useSchedule(
         // no criteria or value, return null
         if (!criteria || !value) return null;
 
-        const scheduleService = new CnelScheduleService();
-        const data = await scheduleService.getSchedule(criteria, value);
-        return {
-          transformed: data ? scheduleTransformer.transform(data) : null,
-        };
+        try {
+          const scheduleService = new CnelScheduleService();
+          const data = await scheduleService.getSchedule(criteria, value);
+
+          if (data.resp === "ERROR") {
+            throw new Error(
+              "No se encontraron datos con los criterios ingresados",
+            );
+          }
+          return {
+            transformed: data ? scheduleTransformer.transform(data) : null,
+          };
+        } catch (err) {
+          throw new Error(
+            "No se encontraron datos con los criterios ingresados",
+          );
+        }
       },
 
       // automatically enable the query if the criteria and value are provided

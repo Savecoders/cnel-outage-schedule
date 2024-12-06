@@ -13,8 +13,8 @@ const getStorage = () => {
   };
 };
 
-const GC_TIME = 1000 * 60 * 60; // 1 hour
-const STALE_TIME = 1000 * 60 * 60; // 1 hour
+const GC_TIME = 1000 * 60 * 60 * 3; // 1 hour
+const STALE_TIME = 1000 * 60 * 60 * 3; // 1 hour
 
 export const customQueryClient = new QueryClient({
   defaultOptions: {
