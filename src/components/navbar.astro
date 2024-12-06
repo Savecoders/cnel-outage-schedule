@@ -2,9 +2,23 @@
 import { ModeToggle } from './mode-toggle';
 ---
 
-<header class='w-full p-4'>
-  <nav class='flex flex-row justify-between px-4 py-2 items-center'>
-    <a class='text-nowrap text-zinc-100 text-2xl'>Cnel Outage</a>
+<style>
+  .nav__glassmorphic {
+    background: rgba(255, 255, 255, 0);
+    backdrop-filter: blur(32px);
+    -webkit-backdrop-filter: blur(32px);
+  }
+</style>
+
+<header class='w-full p-2'>
+  <nav class='nav__glassmorphic flex flex-row justify-between p-2 items-center rounded-md'>
+    <a
+      class='text-nowrap font-medium dark:text-zinc-100 text-slate-950 text-2xl flex gap-2'
+      href='/'
+    >
+      <img width='30px' height='30px' src='/outgates.svg' alt='logo cnel outage schedule' />
+      Cnel Outage</a
+    >
     <ModeToggle client:load />
   </nav>
 </header>
