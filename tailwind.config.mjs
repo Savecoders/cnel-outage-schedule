@@ -5,7 +5,7 @@ export default {
   theme: {
     extend: {
       gridTemplateColumns: {
-        schedule: "repeat(auto-fit, minmax(320px, 1fr))",
+        schedule: "repeat(auto-fit, minmax(280px, 1fr))",
       },
 
       borderRadius: {

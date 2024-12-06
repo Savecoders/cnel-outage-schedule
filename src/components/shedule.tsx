@@ -19,14 +19,14 @@ export default function Schedule({
   return (
     <>
       <article
-        className="flex gap-2 flex-col p-8 rounded-lg border"
+        className="flex gap-4 flex-col p-8 rounded-lg border"
         aria-label="Planificación"
       >
         <h1 className="text-2xl font-bold">{`Cuenta: ${cuentaContrato}`}</h1>
-        <p className="text-xl font-normal text-zinc-500">{`Alimentador: ${alimentador}`}</p>
-        <p className="text-xl font-normal text-zinc-500">{`Dirección: ${direccion}`}</p>
-        <p className="text-xl font-normal text-zinc-500">{`Fecha de Registro: ${fechaRegistro}`}</p>
-        <div className="grid grid-cols-schedule gap-4 max-w-3xl">
+        <p className="text-xl font-normal text-zinc-400">{`Alimentador: ${alimentador}`}</p>
+        <p className="text-xl font-normal text-zinc-400">{`Dirección: ${direccion}`}</p>
+        <p className="text-xl font-normal text-zinc-400">{`Fecha de Registro: ${fechaRegistro}`}</p>
+        <div className="grid grid-cols-schedule gap-4 py-4">
           {dates.map((date) => (
             <CardOutage
               date={date}

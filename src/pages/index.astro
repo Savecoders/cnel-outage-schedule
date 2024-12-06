@@ -1,8 +1,8 @@
 ---
-import { ModeToggle } from '@/components/mode-toggle';
 import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/navbar.astro';
 import '../styles/globals.css';
-import FormSearch from '@/components/form-search';
+import HeroFormCenterAlignedWithAForm from '@/components/hero-shedule';
 ---
 
 <script is:inline>
@@ -25,11 +25,11 @@ import FormSearch from '@/components/form-search';
 </script>
 
 <Layout title='Cnel Outage Schedule'>
-  <main>
-    <ModeToggle client:load />
-    <section class='flex flex-col items-center justify-center h-screen'>
-      <div class='flex flex-row gap-4'>
-        <FormSearch client:load />
+  <main class='p-2'>
+    <Navbar />
+    <section class='flex flex-col items-center justify-center'>
+      <div class='flex flex-row justify-center align-middle gap-6 w-full'>
+        <HeroFormCenterAlignedWithAForm client:load />
       </div>
     </section>
   </main>

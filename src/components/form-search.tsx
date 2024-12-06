@@ -58,8 +58,8 @@ export default function FormSearch() {
   };
 
   return (
-    <div className="flex flex-col gap-6 max-w-3xl">
-      <form className="flex flex-row gap-6">
+    <>
+      <form className="flex flex-col gap-6 w-full md:flex-row">
         <SelectCriteria
           onChange={handleChangeCriteria}
           selectedCriteria={formState.criteria}
@@ -95,6 +95,6 @@ export default function FormSearch() {
             )}
         </>
       )}
-    </div>
+    </>
   );
 }
