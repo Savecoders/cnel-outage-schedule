@@ -15,12 +15,16 @@ const { title, description, image } = Astro.props as Props;
   <head>
     <meta charset='UTF-8' />
     <meta name='description' content={description} />
+    <meta name='keywords' content='CNEL, Corte Nacional de la Luz, Outage Schedule' />
+    <meta name='author' content='Savecoders' />
+    <meta name='image' content={image} />
     <meta name='viewport' content='width=device-width' />
     <link rel='icon' type='image/svg+xml' href='/outgates.svg' />
     <meta name='generator' content={Astro.generator} />
     <meta property='og:title' content={title} />
     <meta property='og:description' content={description} />
     <meta property='og:image' content={image} />
+    <meta property='og:site_name' content='cnel-outage-schedule' />
     <title>{title}</title>
   </head>
   <body>
