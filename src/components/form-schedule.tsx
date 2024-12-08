@@ -9,8 +9,10 @@ import type { TransformedNotification } from "@/types/transformed-schedule.type"
 import Schedule from "./shedule";
 import { Skeleton } from "./ui/skeleton";
 import Danger from "./ui/danger";
+import ExportImage from "./export-image";
+import { Loader2 } from "lucide-react";
 
-export default function FormSearch() {
+export default function FormSchedule() {
   const [formState, setFormState] = useState({
     criteria: CriteriaSearch.Id,
     value: "",
@@ -82,16 +84,21 @@ export default function FormSearch() {
           disabled={isLoading || !formState.criteria || !formState.value}
           onClick={handleSearch}
         >
+          {isLoading && <Loader2 className="animate-spin" />}
           Buscar
         </Button>
       </form>
       {isLoading ? (
         <div className="flex flex-col space-y-3">
-          <Skeleton className="h-[125px] w-full rounded-xl" />
+          <Skeleton className="h-[225px] w-full rounded-xl" />
         </div>
       ) : (
         <>
           {error && <Danger message={error.message} error="Error" />}
+
+          {!error && (data || cachedResults) && (
+            <ExportImage elementId="schedule" />
+          )}
 
           {data?.transformed?.notificaciones && (
             <Schedule schedule={data.transformed?.notificaciones[0]} />

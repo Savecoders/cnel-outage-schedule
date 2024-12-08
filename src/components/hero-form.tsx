@@ -1,5 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import FormSearch from "./form-search";
+import FormSchedule from "./form-schedule";
 
 export default function HeroFormCenterAlignedWithAForm() {
   return (
@@ -66,7 +66,7 @@ export default function HeroFormCenterAlignedWithAForm() {
             </aside>
           </article>
 
-          <FormSearch />
+          <FormSchedule />
         </div>
       </section>
     </>
