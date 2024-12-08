@@ -14,5 +14,13 @@ export function formatDate(date: string) {
       month: "long",
     },
   );
-  return dateFormatted;
+  return dateFormatted.charAt(0).toUpperCase() + dateFormatted.slice(1);
+}
+
+export function currentDate() {
+  return new Date()
+    .toISOString()
+    .replace(/T/, "_")
+    .replace(/:/g, "-")
+    .split(".")[0];
 }

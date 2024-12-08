@@ -19,7 +19,8 @@ export default function Schedule({
   return (
     <>
       <article
-        className="flex gap-4 flex-col p-8 rounded-lg border"
+        id="schedule" // capture to image
+        className="flex gap-4 flex-col p-8 rounded-lg border bg-background"
         aria-label="Planificación"
       >
         <h1 className="text-2xl font-bold">{`Cuenta: ${cuentaContrato}`}</h1>
