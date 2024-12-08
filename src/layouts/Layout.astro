@@ -3,19 +3,24 @@ import Lune from '@/components/ui/lune.astro';
 
 interface Props {
   title: string;
+  description: string;
+  image: string;
 }
 
-const { title } = Astro.props;
+const { title, description, image } = Astro.props as Props;
 ---
 
 <!doctype html>
 <html lang='en'>
   <head>
     <meta charset='UTF-8' />
-    <meta name='description' content='Astro description' />
+    <meta name='description' content={description} />
     <meta name='viewport' content='width=device-width' />
     <link rel='icon' type='image/svg+xml' href='/outgates.svg' />
     <meta name='generator' content={Astro.generator} />
+    <meta property='og:title' content={title} />
+    <meta property='og:description' content={description} />
+    <meta property='og:image' content={image} />
     <title>{title}</title>
   </head>
   <body>
