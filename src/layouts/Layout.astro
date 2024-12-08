@@ -14,18 +14,36 @@ const { title, description, image } = Astro.props as Props;
 <html lang='en'>
   <head>
     <meta charset='UTF-8' />
+    <meta http-equiv='Content-Language' content='es-EC' />
+    <link rel='canonical' href='https://cnel-outage-schedule.vercel.app/' />
+
+    <title>{title}</title>
+
     <meta name='description' content={description} />
-    <meta name='keywords' content='CNEL, Corte Nacional de la Luz, Outage Schedule' />
+    <meta
+      name='keywords'
+      content='CNEL, Corte Nacional de la Luz, Cnel Outage Schedule, Horarios de cortes de luz, Corte de luz Ecuador, Corte de luz a nivel nacional, Cnel 2024, Cnel cortes 2025'
+    />
     <meta name='author' content='Savecoders' />
-    <meta name='image' content={image} />
+    <meta name='application-name' content='Cnel Outage Schedule' />
     <meta name='viewport' content='width=device-width' />
     <link rel='icon' type='image/svg+xml' href='/outgates.svg' />
     <meta name='generator' content={Astro.generator} />
+
+    <!-- Open Graph Meta -->
     <meta property='og:title' content={title} />
     <meta property='og:description' content={description} />
     <meta property='og:image' content={image} />
     <meta property='og:site_name' content='cnel-outage-schedule' />
-    <title>{title}</title>
+    <meta property='og:type' content='website' />
+    <meta property='og:url' content='https://cnel-outage-schedule.vercel.app/' />
+
+    <!-- Twitter -->
+    <meta name='twitter:card' content='summary_large_image' />
+    <meta name='twitter:url' content='https://cnel-outage-schedule.vercel.app/' />
+    <meta name='twitter:title' content={title} />
+    <meta name='twitter:description' content={description} />
+    <meta name='twitter:image' content={image} />
   </head>
   <body>
     <Lune />
